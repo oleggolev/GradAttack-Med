@@ -1,0 +1,13 @@
+#%Module
+
+proc ModulesHelp { } {
+   puts stderr "This module adds solar to your path"
+}
+ 
+module-whatis "This module adds solar to your path\n"
+
+set basedir "/home/aturing/software/solar-1.2"
+prepend-path PATH "${basedir}/bin"
+prepend-path LD_LIBRARY_PATH "${basedir}/lib64"
+module load intel/19.1/64/19.1.1.217
+module load intel-mpi/intel/2019.7/64
