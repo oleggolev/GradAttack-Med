@@ -10,6 +10,7 @@
 #SBATCH --mail-type=begin        # send email when job begins
 #SBATCH --mail-type=end          # send email when job ends
 #SBATCH --mail-type=fail         # send email if job fails
+#SBATCH --output=/scratch/network/ogolev/GradAttack-Med/output/%j.out
 #SBATCH --mail-user=ogolev@princeton.edu
 
 module purge
