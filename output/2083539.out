@@ -1,6 +1,0 @@
-/var/spool/slurmd/job2083539/slurm_script: line 19: prepend-path: command not found
-/var/spool/slurmd/job2083539/slurm_script: line 20: setenv: command not found
-Traceback (most recent call last):
-  File "/scratch/network/ogolev/GradAttack-Med/examples/train_cifar10.py", line 6, in <module>
-    from gradattack.datamodules import CIFAR10DataModule
-ModuleNotFoundError: No module named 'gradattack'
