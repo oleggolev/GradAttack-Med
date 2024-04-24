@@ -13,8 +13,8 @@
 #SBATCH --mail-user=ogolev@princeton.edu
 
 module purge
-# module load grad-attack/1.0
-module load anaconda3/2024.2
+module load anaconda3/2022.10
+source /home/ogolev/GradAttach-Med/grad-attack-env/bin/activate
 
 # Vanilla Training
 python3 examples/train_cifar10.py --scheduler ReduceLROnPlateau --tune_on_val 0.02 --lr 0.05 --lr_factor 0.5 --logname CIFAR10/Vanilla 
