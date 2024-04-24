@@ -103,7 +103,7 @@ class LightningWrapper(pl.LightningModule):
             return self._model(x)
 
     def should_accumulate(self):
-        return self.trainer.train_loop.should_accumulate()
+        return self.trainer.fit_loop.should_accumulate()
 
     def on_train_epoch_start(self) -> None:
         for callback in self._on_train_epoch_start_callbacks:
