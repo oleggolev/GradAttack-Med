@@ -10,7 +10,7 @@ sbatch -J no-defenses scripts/train/vanilla.slurm
 # Train with GradPrune.
 for p in 0.5 0.7 0.9 0.95 0.99 0.999
 do
-    scommand="sbatch -J prune-${p} vanilla.slurm $p"
+    scommand="sbatch -J prune-${p} scripts/train/prune.slurm $p"
     echo "submit command: $scommand"
     $scommand
 done
@@ -18,7 +18,7 @@ done
 # Train with MixUp.
 for k in 2 4 6 8
 do
-    scommand="sbatch -J mixup-${k} mixup.slurm $k"
+    scommand="sbatch -J mixup-${k} scripts/train/mixup.slurm $k"
     echo "submit command: $scommand"
     $scommand
 done
@@ -26,7 +26,7 @@ done
 # Train with InstaHide.
 for k in 2 4 6 8
 do
-    scommand="sbatch -J insta-${k} insta.slurm $k"
+    scommand="sbatch -J insta-${k} scripts/train/insta.slurm $k"
     echo "submit command: $scommand"
     $scommand
 done
@@ -36,7 +36,7 @@ for k in 2 4 6
 do
     for p in 0.7 0.9 0.99
     do
-        scommand="sbatch -J prune-mixup-${p}-${k} prune-mixup.slurm $p $k"
+        scommand="sbatch -J prune-mixup-${p}-${k} scripts/train/prune-mixup.slurm $p $k"
         echo "submit command: $scommand"
         $scommand
     done
@@ -47,7 +47,7 @@ for k in 2 4 6
 do
     for p in 0.7 0.9 0.99
     do
-        scommand="sbatch -J prune-insta-${p}-${k} prune-insta.slurm $p $k"
+        scommand="sbatch -J prune-insta-${p}-${k} scripts/train/prune-insta.slurm $p $k"
         echo "submit command: $scommand"
         $scommand
     done
