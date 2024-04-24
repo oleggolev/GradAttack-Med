@@ -1,7 +1,6 @@
 # Cache files
 *.pyc
 .vscode/
-*.sh
 
 # Checkpoint folders
 checkpoint/
