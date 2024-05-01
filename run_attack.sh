@@ -1,8 +1,16 @@
+#!/bin/bash
+
+# Run the training script with different hyperparameters.
+export PYTHONPATH=/scratch/network/ogolev/GradAttack-Med:$PYTHONPATH
+export WORKDIR=/scratch/network/ogolev/GradAttack-Med
+
 # As done in the paper, we will run the attack in its strongest setting. That is,
 # the private BatchNorm statistics and private labels of the victim batch are known.
 
 # Run the attack with no defenses.
-python3 examples/attack_cifar10_gradinversion.py --batch_size 16 --BN_exact --tv 0.1 --bn_reg 0.005
+scommand="sbatch -J vanilla scripts/attack/vanilla.slurm"
+echo "submit command: $scommand"
+$scommand
 
 # # Run the attack on pruned models.
 # python3 examples/attack_cifar10_gradinversion.py --batch_size 16 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_gradprune --p 0.5
