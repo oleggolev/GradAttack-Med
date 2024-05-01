@@ -80,7 +80,8 @@ def setup_attack():
             datamodule.num_classes,
             training_loss_metric=loss,
             pretrained=False,
-            ckpt="checkpoint/vanilla_epoch=1-step=1531.ckpt",
+            # ckpt="checkpoint/vanilla_epoch=1-step=1531.ckpt",
+            ckpt="/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/Vanilla/SGD/ReduceLROnPlateau/version_12/checkpoints/epoch=38-step=14936.ckpt",
             **hparams).to(DEVICE)
 
     logger = TensorBoardLogger("tb_logs", name=f"{args.logname}")
