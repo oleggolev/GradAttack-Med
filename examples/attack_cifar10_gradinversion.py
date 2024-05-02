@@ -59,20 +59,58 @@ def setup_attack():
         loss = cross_entropy_for_onehot
     else:
         loss = CrossEntropyLoss(reduction="mean")
-
-    if args.defense_instahide:
+        
+    if args.defense_gradprune:
+        if args.defense_instahide:
+            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/InstaHide+GradPrune-{args.p}-{args.k}/SGD/StepLR/version_0/checkpoints/"
+            ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
+            ckpt_file_abs_path = dir + ckpt_file
+            model = create_lightning_module("ResNet18",
+                                            datamodule.num_classes,
+                                            training_loss_metric=loss,
+                                            pretrained=False,
+                                            ckpt=ckpt_file_abs_path,
+                                            **hparams).to(DEVICE)
+        elif args.defense_mixup:
+            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/MixUp+GradPrune-{args.p}-{args.k}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+            ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
+            ckpt_file_abs_path = dir + ckpt_file
+            model = create_lightning_module("ResNet18",
+                                            datamodule.num_classes,
+                                            training_loss_metric=loss,
+                                            pretrained=False,
+                                            ckpt=ckpt_file_abs_path,
+                                            **hparams).to(DEVICE)
+        else:
+            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/GradPrune-{args.p}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+            ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
+            ckpt_file_abs_path = dir + ckpt_file
+            model = create_lightning_module("ResNet18",
+                                            datamodule.num_classes,
+                                            training_loss_metric=loss,
+                                            pretrained=False,
+                                            ckpt=ckpt_file_abs_path,
+                                            **hparams).to(DEVICE)
+            
+    elif args.defense_instahide:
+        dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/InstaHide-{args.k}/SGD/StepLR/version_0/checkpoints/"
+        ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
+        ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
                                         datamodule.num_classes,
                                         training_loss_metric=loss,
                                         pretrained=False,
-                                        ckpt="checkpoint/InstaHide_ckpt.ckpt",
+                                        ckpt=ckpt_file_abs_path,
                                         **hparams).to(DEVICE)
     elif args.defense_mixup:
+        dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/MixUp-{args.k}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+        ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
+        ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
                                         datamodule.num_classes,
                                         training_loss_metric=loss,
                                         pretrained=False,
-                                        ckpt="checkpoint/Mixup_ckpt.ckpt",
+                                        ckpt=ckpt_file_abs_path,
                                         **hparams).to(DEVICE)
     else:
         model = create_lightning_module(
@@ -80,7 +118,6 @@ def setup_attack():
             datamodule.num_classes,
             training_loss_metric=loss,
             pretrained=False,
-            # ckpt="checkpoint/vanilla_epoch=1-step=1531.ckpt",
             ckpt="/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/Vanilla/SGD/ReduceLROnPlateau/version_12/checkpoints/epoch=38-step=14936.ckpt",
             **hparams).to(DEVICE)
 
@@ -98,6 +135,8 @@ def setup_attack():
 
     defense_pack.apply_defense(pipeline)
 
+    if args.results_dir is None:
+        args.results_dir = "/scratch/network/ogolev/GradAttack-Med/attack_results"
     ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={args.data_seed}/Epoch_{EPOCH}"
     try:
         os.makedirs(ROOT_DIR, exist_ok=True)
