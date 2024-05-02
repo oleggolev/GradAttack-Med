@@ -32,7 +32,7 @@ def setup_attack():
     EPOCH = attack_hparams["epoch"]
     devices = [args.gpuid]
 
-    pl.utilities.seed.seed_everything(1234 + EPOCH)
+    pl.utilities.seed.seed_everything(42 + EPOCH)
     torch.backends.cudnn.benchmark = True
 
     BN_str = ''
