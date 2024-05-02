@@ -4,19 +4,53 @@
 export PYTHONPATH=/scratch/network/ogolev/GradAttack-Med:$PYTHONPATH
 export WORKDIR=/scratch/network/ogolev/GradAttack-Med
 
-# As done in the paper, we will run the attack in its strongest setting. That is,
-# the private BatchNorm statistics and private labels of the victim batch are known.
-
-# Run the attack with no defenses.
-scommand="sbatch -J vanilla scripts/attack/vanilla.slurm"
+# Attack with no defenses.
+scommand="sbatch -J attack-no-defenses scripts/attack/vanilla.slurm"
 echo "submit command: $scommand"
 $scommand
 
-# # Run the attack on pruned models.
-# python3 examples/attack_cifar10_gradinversion.py --batch_size 16 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_gradprune --p 0.5
+# Attack with GradPrune.
+for p in 0.5 0.7 0.9 0.95 0.99 0.999
+do
+    scommand="sbatch -J attack-prune-${p} scripts/attack/prune.slurm $p"
+    echo "submit command: $scommand"
+    $scommand
+done
 
-# # Run the attack on InstaHide models.
-# python3 examples/attack_cifar10_gradinversion.py --batch_size 16 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_instahide --k 4 --c_1 0 --c_2 0.65
-# python examples/attack_decode.py --dir PATH_TO_STEP1_RESULTS --instahide --k 4 --dest_dir PATH_TO_STEP2_RESULTS
+# Attack with MixUp.
+for k in 2 4 6 8
+do
+    scommand="sbatch -J attack-mixup-${k} scripts/attack/mixup.slurm $k"
+    echo "submit command: $scommand"
+    $scommand
+done
 
-# /scratch/network/ogolev/GradAttack-Med/results/CIFAR10-16-InstaHideDefense-k\{4\}-c_1\{0.0\}-c_2\{0.65\}/tv\=0.01BN_exact-bn\=0.001/)
+# Attack with InstaHide.
+for k in 2 4 6 8
+do
+    scommand="sbatch -J attack-insta-${k} scripts/attack/insta.slurm $k"
+    echo "submit command: $scommand"
+    $scommand
+done
+
+# Attack with MixUp + GradPrune.
+for k in 2 4 6
+do
+    for p in 0.7 0.9 0.99
+    do
+        scommand="sbatch -J attack-prune-mixup-${p}-${k} scripts/attack/prune-mixup.slurm $p $k"
+        echo "submit command: $scommand"
+        $scommand
+    done
+done
+
+# Attack with InstaHide + GradPrune.
+for k in 2 4 6
+do
+    for p in 0.7 0.9 0.99
+    do
+        scommand="sbatch -J attack-prune-insta-${p}-${k} scripts/attack/prune-insta.slurm $p $k"
+        echo "submit command: $scommand"
+        $scommand
+    done
+done
