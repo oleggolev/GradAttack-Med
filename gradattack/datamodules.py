@@ -14,7 +14,7 @@ from torchvision.datasets.cifar import CIFAR10
 from torchvision.datasets import MNIST
 
 DEFAULT_DATA_DIR = "./data"
-DEFAULT_NUM_WORKERS = 32
+DEFAULT_NUM_WORKERS = 48
 
 TRANSFORM_IMAGENET = [
     transforms.Resize(40),

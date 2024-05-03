@@ -18,4 +18,4 @@ module load anaconda3/2022.10
 source /scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/activate
 
 # Attack the MixUp model.
-srun python3 examples/attack_cifar10_gradinversion.py --batch_size 16 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_mixup --k $1 --c_1 0 --c_2 0.65
+srun python3 examples/attack_cifar10_gradinversion.py --batch_size $2 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_mixup --k $1 --c_1 0 --c_2 0.65

@@ -52,7 +52,7 @@ def setup_attack():
                                        "rotation": -1,
                                        "crop": False
                                    },
-                                   num_workers=1,
+                                   num_workers=48,
                                    seed=args.data_seed)
     print("Loaded data!")
     if args.defense_instahide or args.defense_mixup:  # Customize loss
@@ -219,7 +219,7 @@ def run_attack(pipeline, attack_hparams):
         attack_trainer = pl.Trainer(
             gpus=devices,
             logger=tb_logger,
-            max_epochs=EPOCH,
+            max_epochs=1,
             benchmark=True,
             checkpoint_callback=False,
         )
