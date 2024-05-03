@@ -203,7 +203,7 @@ def run_attack(pipeline, attack_hparams):
             ground_truth_gradients=batch_gradients,
             ground_truth_labels=batch_targets_transform,
             reconstruct_labels=attack_hparams["reconstruct_labels"],
-            num_iterations=10000,
+            num_iterations=1000,
             signed_gradients=True,
             signed_image=attack_hparams["signed_image"],
             boxed=True,
