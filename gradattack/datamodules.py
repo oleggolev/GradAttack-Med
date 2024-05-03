@@ -23,7 +23,6 @@ TRANSFORM_IMAGENET = [
     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
 ]
 
-
 def train_val_split(dataset_size: int, val_train_split: float = 0.02):
     validation_split = int((1 - val_train_split) * dataset_size)
     train_indices = range(dataset_size)
@@ -516,6 +515,130 @@ class CIFAR10DataModule(LightningDataModule):
                 ori_train_set, sample_per_class=500)
             self.train_set = Subset(ori_train_set, self.attack_indices)
             self.test_set = Subset(self.test_set, range(100))
+
+    def train_dataloader(self):
+        if self.batch_sampler is None:
+            return DataLoader(self.train_set,
+                              batch_size=self.batch_size,
+                              num_workers=self.num_workers)
+        else:
+            return DataLoader(
+                self.train_set,
+                batch_sampler=self.batch_sampler,
+                num_workers=self.num_workers,
+            )
+
+    def val_dataloader(self):
+        return DataLoader(self.val_set,
+                          batch_size=self.batch_size,
+                          num_workers=self.num_workers)
+
+    def test_dataloader(self):
+        return DataLoader(self.test_set,
+                          batch_size=self.batch_size,
+                          num_workers=self.num_workers)
+        
+class BrainTumorMRIDataModule(LightningDataModule):
+    def __init__(
+        self,
+        augment: dict = None,
+        data_dir: str = os.path.join(DEFAULT_DATA_DIR, "brain_tumor_MRI"),
+        batch_size: int = 32,
+        num_workers: int = DEFAULT_NUM_WORKERS,
+        batch_sampler: Sampler = None,
+        tune_on_val: bool = False,
+    ):
+        self.data_dir = data_dir
+        self.batch_size = batch_size
+        self.num_workers = num_workers
+        self.num_classes = 4
+        self.multi_class = False
+
+        self.batch_sampler = batch_sampler
+        self.tune_on_val = tune_on_val
+
+        print(data_dir)
+        brain_tumor_MRI_normalize = transforms.Normalize((0.485, 0.456, 0.406),
+                                                  (0.229, 0.224, 0.225))
+
+        self._train_transforms = [
+            transforms.Resize(256),
+            transforms.ToTensor(),
+            brain_tumor_MRI_normalize,
+        ]
+        if augment["hflip"]:
+            self._train_transforms.insert(
+                0, transforms.RandomHorizontalFlip(p=0.5))
+        if augment["color_jitter"] is not None:
+            self._train_transforms.insert(
+                0,
+                transforms.ColorJitter(
+                    brightness=augment["color_jitter"][0],
+                    contrast=augment["color_jitter"][1],
+                    saturation=augment["color_jitter"][2],
+                    hue=augment["color_jitter"][3],
+                ),
+            )
+        if augment["rotation"] > 0:
+            self._train_transforms.insert(
+                0, transforms.RandomRotation(augment["rotation"]))
+        if augment["crop"]:
+            self._train_transforms.insert(0,
+                                          transforms.RandomCrop(32, padding=4))
+
+        print(self._train_transforms)
+
+        self._test_transforms = [
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            imagenet_normalize,
+        ]
+
+    def setup(self, stage: Optional[str] = None):
+        """Initialize the dataset based on the stage option ('fit', 'test' or 'attack'):
+        - if stage is 'fit', set up the training and validation dataset;
+        - if stage is 'test', set up the testing dataset;
+        - if stage is 'attack', set up the attack dataset (a subset of training images)
+
+        Args:
+            stage (Optional[str], optional): stage option. Defaults to None.
+        """
+        if stage == "fit" or stage is None:
+            self.train_set = datasets.ImageFolder(
+                os.path.join(self.data_dir, "train"),
+                transform=transforms.Compose(self._train_transforms),
+            )
+            if self.tune_on_val:
+                self.val_set = datasets.ImageFolder(
+                    os.path.join(self.data_dir, "train"),
+                    transform=transforms.Compose(self._test_transforms),
+                )
+                train_indices, val_indices = train_val_split(
+                    len(self.train_set), self.tune_on_val)
+                self.train_set = Subset(self.train_set, train_indices)
+                self.val_set = Subset(self.val_set, val_indices)
+            else:  # use test set
+                self.val_set = datasets.ImageFolder(
+                    os.path.join(self.data_dir, "val"),
+                    transform=transforms.Compose(self._test_transforms),
+                )
+
+        # Assign test dataset for use in dataloader(s)
+        if stage == "test" or stage is None:
+            self.test_set = datasets.ImageFolder(
+                os.path.join(self.data_dir, "val"),
+                transform=transforms.Compose(self._test_transforms),
+            )
+
+        if stage == "attack":
+            ori_train_set = datasets.ImageFolder(
+                os.path.join(self.data_dir, "attack"),
+                transform=transforms.Compose(self._train_transforms),
+            )
+            self.attack_indices, self.class2attacksample = extract_attack_set(
+                ori_train_set)
+            self.train_set = Subset(ori_train_set, self.attack_indices)
 
     def train_dataloader(self):
         if self.batch_sampler is None:

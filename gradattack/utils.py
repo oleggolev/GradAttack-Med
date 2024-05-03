@@ -213,7 +213,7 @@ def parse_args():
                         type=int,
                         help="seed to select attack subset")
     parser.add_argument("--attack_epoch",
-                        default=0,
+                        default=20,
                         type=int,
                         help="iterations for the attack")
     parser.add_argument(

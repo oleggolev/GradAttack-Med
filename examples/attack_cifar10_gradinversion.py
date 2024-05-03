@@ -135,8 +135,6 @@ def setup_attack():
 
     defense_pack.apply_defense(pipeline)
 
-    if args.results_dir is None:
-        args.results_dir = "/scratch/network/ogolev/GradAttack-Med/attack_results"
     ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={args.data_seed}/Epoch_{EPOCH}"
     try:
         os.makedirs(ROOT_DIR, exist_ok=True)
@@ -221,7 +219,7 @@ def run_attack(pipeline, attack_hparams):
         attack_trainer = pl.Trainer(
             gpus=devices,
             logger=tb_logger,
-            max_epochs=1,
+            max_epochs=EPOCH,
             benchmark=True,
             checkpoint_callback=False,
         )
