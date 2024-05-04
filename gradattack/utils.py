@@ -218,7 +218,7 @@ def parse_args():
                         help="iterations for the attack")
     parser.add_argument(
         "--bn_reg",
-        default=0,
+        default=0.001,
         type=float,
         help="coef. for batchnorm regularization term",
     )

@@ -64,7 +64,7 @@ def setup_attack():
         
     if args.defense_gradprune:
         if args.defense_instahide:
-            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/InstaHide+GradPrune-{args.p}-{args.k}/SGD/StepLR/version_0/checkpoints/"
+            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/InstaHide+GradPrune-{args.p}-{args.klam}/SGD/StepLR/version_0/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -74,7 +74,7 @@ def setup_attack():
                                             ckpt=ckpt_file_abs_path,
                                             **hparams).to(DEVICE)
         elif args.defense_mixup:
-            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/MixUp+GradPrune-{args.p}-{args.k}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+            dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/MixUp+GradPrune-{args.p}-{args.klam}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -95,7 +95,7 @@ def setup_attack():
                                             **hparams).to(DEVICE)
             
     elif args.defense_instahide:
-        dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/InstaHide-{args.k}/SGD/StepLR/version_0/checkpoints/"
+        dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/InstaHide-{args.klam}/SGD/StepLR/version_0/checkpoints/"
         ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
         ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
@@ -105,7 +105,7 @@ def setup_attack():
                                         ckpt=ckpt_file_abs_path,
                                         **hparams).to(DEVICE)
     elif args.defense_mixup:
-        dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/MixUp-{args.k}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+        dir = f"/scratch/network/ogolev/GradAttack-Med/tb_logs/CIFAR10/MixUp-{args.klam}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
         ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
         ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
