@@ -46,7 +46,7 @@ def setup_attack():
         BN_str = 'BN_exact'
         attack_hparams['attacker_eval_mode'] = False
 
-    datamodule = CIFAR10DataModule(batch_size=1,
+    datamodule = CIFAR10DataModule(batch_size=args.batch_size,
                                    augment={
                                        "hflip": False,
                                        "color_jitter": None,
