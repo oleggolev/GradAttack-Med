@@ -537,12 +537,13 @@ class CIFAR10DataModule(LightningDataModule):
         return DataLoader(self.test_set,
                           batch_size=self.batch_size,
                           num_workers=self.num_workers)
-        
+
+# Dataset can be downloaded here: https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri
 class BrainTumorMRIDataModule(LightningDataModule):
     def __init__(
         self,
         augment: dict = None,
-        data_dir: str = os.path.join(DEFAULT_DATA_DIR, "brain_tumor_MRI"),
+        data_dir: str = os.path.join(DEFAULT_DATA_DIR, "brain-tumor-MRI"),
         batch_size: int = 32,
         num_workers: int = DEFAULT_NUM_WORKERS,
         batch_sampler: Sampler = None,
@@ -558,12 +559,12 @@ class BrainTumorMRIDataModule(LightningDataModule):
         self.tune_on_val = tune_on_val
 
         print(data_dir)
-        brain_tumor_MRI_normalize = transforms.Normalize((0.485, 0.456, 0.406),
-                                                  (0.229, 0.224, 0.225))
+        brain_tumor_MRI_normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 
         self._train_transforms = [
-            transforms.Resize(256),
-            transforms.ToTensor(),
+            transforms.Resize((256, 256)),  # Resize images to 256x256
+            transforms.Grayscale(num_output_channels=1),  # Convert to grayscale
+            transforms.ToTensor(),  # Convert to tensor
             brain_tumor_MRI_normalize,
         ]
         if augment["hflip"]:

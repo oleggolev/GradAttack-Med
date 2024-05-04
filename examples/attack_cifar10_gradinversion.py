@@ -32,7 +32,8 @@ def setup_attack():
     EPOCH = attack_hparams["epoch"]
     devices = [args.gpuid]
 
-    pl.utilities.seed.seed_everything(42 + EPOCH)
+    seed = 1234 + EPOCH
+    pl.utilities.seed.seed_everything(seed)
     torch.backends.cudnn.benchmark = True
 
     BN_str = ''
@@ -45,7 +46,7 @@ def setup_attack():
         BN_str = 'BN_exact'
         attack_hparams['attacker_eval_mode'] = False
 
-    datamodule = CIFAR10DataModule(batch_size=args.batch_size,
+    datamodule = CIFAR10DataModule(batch_size=1,
                                    augment={
                                        "hflip": False,
                                        "color_jitter": None,
@@ -135,7 +136,7 @@ def setup_attack():
 
     defense_pack.apply_defense(pipeline)
 
-    ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={args.data_seed}/Epoch_{EPOCH}"
+    ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/seed={seed}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={args.data_seed}/Epoch_{EPOCH}"
     try:
         os.makedirs(ROOT_DIR, exist_ok=True)
     except FileExistsError:
@@ -203,7 +204,7 @@ def run_attack(pipeline, attack_hparams):
             ground_truth_gradients=batch_gradients,
             ground_truth_labels=batch_targets_transform,
             reconstruct_labels=attack_hparams["reconstruct_labels"],
-            num_iterations=1000,
+            num_iterations=10000,
             signed_gradients=True,
             signed_image=attack_hparams["signed_image"],
             boxed=True,
