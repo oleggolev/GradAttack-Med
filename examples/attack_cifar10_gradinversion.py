@@ -54,7 +54,8 @@ def setup_attack():
                                        "crop": False
                                    },
                                    num_workers=48,
-                                   seed=args.data_seed)
+                                   seed=seed)
+                                #    seed=args.data_seed)
     print("Loaded data!")
     if args.defense_instahide or args.defense_mixup:  # Customize loss
         loss = cross_entropy_for_onehot
@@ -136,7 +137,7 @@ def setup_attack():
 
     defense_pack.apply_defense(pipeline)
 
-    ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/seed={seed}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={args.data_seed}/Epoch_{EPOCH}"
+    ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={seed}/Epoch_{EPOCH}"
     try:
         os.makedirs(ROOT_DIR, exist_ok=True)
     except FileExistsError:
