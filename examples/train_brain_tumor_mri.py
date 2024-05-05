@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     augment = parse_augmentation(args)
 
-    assert args.data == "Brain-Tumor-MRI"
+    # assert args.data == "Brain-Tumor-MRI"
 
     datamodule = BrainTumorMRIDataModule(
         augment=augment,
