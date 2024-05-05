@@ -559,47 +559,22 @@ class BrainTumorMRIDataModule(LightningDataModule):
         self.tune_on_val = tune_on_val
 
         print(data_dir)
-        brain_tumor_MRI_normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-
-        transforms.RandomResizedCrop(224),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-
+        
         self._train_transforms = [
-            transforms.Resize((256, 256)),  # Resize images to 256x256
-            transforms.Grayscale(num_output_channels=1),  # Convert to grayscale
-            transforms.ToTensor(),  # Convert to tensor
-            brain_tumor_MRI_normalize,
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]
-        if augment["hflip"]:
-            self._train_transforms.insert(
-                0, transforms.RandomHorizontalFlip(p=0.5))
-        if augment["color_jitter"] is not None:
-            self._train_transforms.insert(
-                0,
-                transforms.ColorJitter(
-                    brightness=augment["color_jitter"][0],
-                    contrast=augment["color_jitter"][1],
-                    saturation=augment["color_jitter"][2],
-                    hue=augment["color_jitter"][3],
-                ),
-            )
-        if augment["rotation"] > 0:
-            self._train_transforms.insert(
-                0, transforms.RandomRotation(augment["rotation"]))
-        if augment["crop"]:
-            self._train_transforms.insert(0,
-                                          transforms.RandomCrop(32, padding=4))
-
         print(self._train_transforms)
 
         self._test_transforms = [
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            imagenet_normalize,
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ]
+        print(self._test_transforms)
 
     def setup(self, stage: Optional[str] = None):
         """Initialize the dataset based on the stage option ('fit', 'test' or 'attack'):
@@ -612,12 +587,12 @@ class BrainTumorMRIDataModule(LightningDataModule):
         """
         if stage == "fit" or stage is None:
             self.train_set = datasets.ImageFolder(
-                os.path.join(self.data_dir, "train"),
+                os.path.join(self.data_dir, "Training"),
                 transform=transforms.Compose(self._train_transforms),
             )
             if self.tune_on_val:
                 self.val_set = datasets.ImageFolder(
-                    os.path.join(self.data_dir, "train"),
+                    os.path.join(self.data_dir, "Training"),
                     transform=transforms.Compose(self._test_transforms),
                 )
                 train_indices, val_indices = train_val_split(
@@ -626,20 +601,20 @@ class BrainTumorMRIDataModule(LightningDataModule):
                 self.val_set = Subset(self.val_set, val_indices)
             else:  # use test set
                 self.val_set = datasets.ImageFolder(
-                    os.path.join(self.data_dir, "val"),
+                    os.path.join(self.data_dir, "Testing"),
                     transform=transforms.Compose(self._test_transforms),
                 )
 
         # Assign test dataset for use in dataloader(s)
         if stage == "test" or stage is None:
             self.test_set = datasets.ImageFolder(
-                os.path.join(self.data_dir, "val"),
+                os.path.join(self.data_dir, "Testing"),
                 transform=transforms.Compose(self._test_transforms),
             )
 
         if stage == "attack":
             ori_train_set = datasets.ImageFolder(
-                os.path.join(self.data_dir, "attack"),
+                os.path.join(self.data_dir, "Training"),
                 transform=transforms.Compose(self._train_transforms),
             )
             self.attack_indices, self.class2attacksample = extract_attack_set(
@@ -648,14 +623,18 @@ class BrainTumorMRIDataModule(LightningDataModule):
 
     def train_dataloader(self):
         if self.batch_sampler is None:
-            return DataLoader(self.train_set,
-                              batch_size=self.batch_size,
-                              num_workers=self.num_workers)
+            return DataLoader(
+                self.train_set,
+                batch_size=self.batch_size,
+                num_workers=self.num_workers,
+                shuffle=True,
+            )
         else:
             return DataLoader(
                 self.train_set,
                 batch_sampler=self.batch_sampler,
                 num_workers=self.num_workers,
+                shuffle=True,
             )
 
     def val_dataloader(self):
