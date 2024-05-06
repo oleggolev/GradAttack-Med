@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-source /scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/activate
+source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
 
 # Gradient Pruning + InstaHide  
 srun python3 examples/attack_cifar10_gradinversion.py --batch_size $3 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_instahide --k $2 --c_1 0 --c_2 0.65 --defense_gradprune --p $1
