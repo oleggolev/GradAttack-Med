@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-conda activate /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env
+conda activate grad-attack-env
 
 # Defend with MixUp
 srun python3 examples/train_brain_tumor_mri.py --scheduler ReduceLROnPlateau --n_epoch 50 --tune_on_val 0.02 --lr 0.1 --lr_factor 0.5 --logname Brain-Tumor-MRI/MixUp-$1 --defense_mixup --k $1 --c_1 0 --c_2 0.65  --patience 50

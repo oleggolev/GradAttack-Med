@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-conda activate /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env
+conda activate grad-attack-env
 
 # Defend with InstaHide
 srun python3 examples/train_brain_tumor_mri.py --scheduler StepLR --n_epoch 50 --lr_step 50 --tune_on_val 0.02 --lr 0.05 --lr_factor 0.1 --logname Brain-Tumor-MRI/InstaHide-$1 --defense_instahide --k $1 --c_1 0 --c_2 0.65 --patience 50

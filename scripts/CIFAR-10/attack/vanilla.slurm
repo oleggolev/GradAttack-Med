@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-conda activate /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env
+conda activate grad-attack-env
 
 # No defenses: strong attacker (the attacker knows the BatchNorm statistics and private labels)
 srun python3 examples/attack_cifar10_gradinversion.py --batch_size $1 --BN_exact --tv 0.1 --bn_reg 0.005
