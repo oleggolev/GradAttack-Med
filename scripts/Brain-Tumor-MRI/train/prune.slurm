@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
+conda activate /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env
 
 # Defend with Gradient Pruning
 srun python3 examples/train_brain_tumor_mri.py --scheduler ReduceLROnPlateau --n_epoch 50 --tune_on_val 0.02 --lr 0.05 --lr_factor 0.5 --logname Brain-Tumor-MRI/GradPrune-$1 --defense_gradprune --p $1
