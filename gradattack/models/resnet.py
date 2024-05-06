@@ -212,6 +212,7 @@ class ResNet(nn.Module):
             out = out.view(out.size(0), -1)
             print(out)
             out = self.linear(out)
+            breakpoint()
         return out
 
 

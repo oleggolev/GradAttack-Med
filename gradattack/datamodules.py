@@ -152,7 +152,8 @@ class ImageNetDataModule(LightningDataModule):
             transforms.ToTensor(),
             imagenet_normalize,
         ]
-
+        print(args.batch_size)
+        
     def setup(self, stage: Optional[str] = None):
         """Initialize the dataset based on the stage option ('fit', 'test' or 'attack'):
         - if stage is 'fit', set up the training and validation dataset;
@@ -554,7 +555,8 @@ class BrainTumorMRIDataModule(LightningDataModule):
         self.num_workers = num_workers
         self.num_classes = 4
         self.multi_class = False
-
+        self.dims = (3, 256, 256)
+        
         self.batch_sampler = batch_sampler
         self.tune_on_val = tune_on_val
 
