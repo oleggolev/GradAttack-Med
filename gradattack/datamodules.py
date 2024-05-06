@@ -555,7 +555,7 @@ class BrainTumorMRIDataModule(LightningDataModule):
         self.num_workers = num_workers
         self.num_classes = 4
         self.multi_class = False
-        self.dims = (3, 256, 256)
+        self.dims = (3, 512, 512)
         
         self.batch_sampler = batch_sampler
         self.tune_on_val = tune_on_val
