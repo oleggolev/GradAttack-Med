@@ -561,20 +561,18 @@ class BrainTumorMRIDataModule(LightningDataModule):
         print(data_dir)
         
         self._train_transforms = [
-            transforms.RandomResizedCrop((224, 224)),
+            transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
-            transforms.Grayscale(),  # Convert image to grayscale
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485], std=[0.229])
+            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
         ]
         print(self._train_transforms)
 
         self._test_transforms = [
-            transforms.Resize((256, 256)),
-            transforms.CenterCrop((224, 224)),
-            transforms.Grayscale(),
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485], std=[0.229])
+            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
         ]
         print(self._test_transforms)
 
