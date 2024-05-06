@@ -10,12 +10,12 @@
 #SBATCH --mail-type=begin        # send email when job begins
 #SBATCH --mail-type=end          # send email when job ends
 #SBATCH --mail-type=fail         # send email if job fails
-#SBATCH --output=/scratch/network/ogolev/GradAttack-Med/output/CIFAR-10/train/%x.out
+#SBATCH --output=/scratch/gpfs/adityam/GradAttack-Med/output/CIFAR-10/train/%x.out
 #SBATCH --mail-user=ogolev@princeton.edu
 
 module purge
 module load anaconda3/2022.10
-source /scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/activate
+source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
 
 # Defend with MixUp
 srun python3 examples/train_cifar10.py --scheduler ReduceLROnPlateau --tune_on_val 0.02 --lr 0.1 --lr_factor 0.5 --logname CIFAR10/MixUp-$1 --defense_mixup --k $1 --c_1 0 --c_2 0.65  --patience 50

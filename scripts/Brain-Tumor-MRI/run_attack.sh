@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Run the training script with different hyperparameters.
-export PYTHONPATH=/scratch/network/ogolev/GradAttack-Med:$PYTHONPATH
-export WORKDIR=/scratch/network/ogolev/GradAttack-Med
+export PYTHONPATH=/scratch/gpfs/adityam/GradAttack-Med:$PYTHONPATH
+export WORKDIR=/scratch/gpfs/adityam/GradAttack-Med
 
 # Define the batch size for all runs.
 batch_size=1
