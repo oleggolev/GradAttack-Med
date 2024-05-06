@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-conda activate grad-attack-env
+source /scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/activate
 
 # Vanilla Training
 srun python3 examples/train_brain_tumor_mri.py --scheduler ReduceLROnPlateau  --n_epoch 50 --tune_on_val 0.02 --lr 0.05 --lr_factor 0.5 --logname Brain-Tumor-MRI/Vanilla 

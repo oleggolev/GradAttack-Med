@@ -15,7 +15,7 @@
 
 module purge
 module load anaconda3/2022.10
-conda activate grad-attack-env
+source /scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/activate
 
 # Gradient Pruning + MixUp 
 srun python3 examples/attack_cifar10_gradinversion.py --batch_size $3 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_mixup --k $2 --c_1 0 --c_2 0.65 --defense_gradprune --p $1
