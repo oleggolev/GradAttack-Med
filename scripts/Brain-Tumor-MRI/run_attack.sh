@@ -7,10 +7,10 @@ export WORKDIR=/scratch/gpfs/adityam/GradAttack-Med
 # Define the batch size for all runs.
 batch_size=1
 
-# # Attack with no defenses.
-# scommand="sbatch -J attack-no-defenses-${batch_size} attack/vanilla.slurm $batch_size"
-# echo "submit command: $scommand"
-# $scommand
+# Attack with no defenses.
+scommand="sbatch -J attack-no-defenses-${batch_size} attack/vanilla.slurm $batch_size"
+echo "submit command: $scommand"
+$scommand
 
 # Attack with GradPrune.
 for p in 0.5 0.7 0.9 0.95 0.99 0.999
