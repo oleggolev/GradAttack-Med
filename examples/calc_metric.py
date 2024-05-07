@@ -33,21 +33,24 @@ if not args.decode_defense:
             transform = np.load(os.path.join(subdir, "transformed.npy"))
 
             for r in recovered:
-                tmp_rmse, tmp_psnr, tmp_lpips = [], [], []
-                for t in transform:
-                    recovered_tensor = torchvision.transforms.functional.to_tensor(
-                        r)
-                    transform_tensor = torchvision.transforms.functional.to_tensor(
-                        t)
-                    tmp_rmse.append(
-                        MeanPixelwiseError(recovered_tensor, transform_tensor))
-                    tmp_psnr.append(PSNR(recovered_tensor, transform_tensor))
-                    tmp_lpips.append(
-                        lpips_fn(recovered_tensor,
-                                 transform_tensor).detach().numpy())
-                rmse.append(min(tmp_rmse))
-                psnr.append(max(tmp_psnr))
-                lpips.append(min(tmp_lpips))
+                try:
+                    tmp_rmse, tmp_psnr, tmp_lpips = [], [], []
+                    for t in transform:
+                        recovered_tensor = torchvision.transforms.functional.to_tensor(
+                            r)
+                        transform_tensor = torchvision.transforms.functional.to_tensor(
+                            t)
+                        tmp_rmse.append(
+                            MeanPixelwiseError(recovered_tensor, transform_tensor))
+                        tmp_psnr.append(PSNR(recovered_tensor, transform_tensor))
+                        tmp_lpips.append(
+                            lpips_fn(recovered_tensor,
+                                    transform_tensor).detach().numpy())
+                    rmse.append(min(tmp_rmse))
+                    psnr.append(max(tmp_psnr))
+                    lpips.append(min(tmp_lpips))
+                except ValueError:  #raised if `y` is empty.
+                    pass
 else:
     originals = np.load(os.path.join(rootdir, "originals.npy"))
     recovereds = np.load(os.path.join(rootdir, "grad_decode.npy"))
