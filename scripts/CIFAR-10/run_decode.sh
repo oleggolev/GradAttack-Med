@@ -8,4 +8,3 @@ export WORKDIR=/scratch/network/ogolev/GradAttack-Med
 scommand="sbatch -J attack-no-defenses scripts/attack/vanilla.slurm"
 echo "submit command: $scommand"
 $scommand
-
