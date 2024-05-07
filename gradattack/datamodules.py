@@ -13,7 +13,7 @@ from torch.utils.data.sampler import Sampler
 from torchvision.datasets.cifar import CIFAR10
 from torchvision.datasets import MNIST
 
-DEFAULT_DATA_DIR = "./data"
+DEFAULT_DATA_DIR = "/scratch/network/ogolev/GradAttack-Med/data"
 DEFAULT_NUM_WORKERS = 48
 
 TRANSFORM_IMAGENET = [
@@ -152,7 +152,8 @@ class ImageNetDataModule(LightningDataModule):
             transforms.ToTensor(),
             imagenet_normalize,
         ]
-
+        print(args.batch_size)
+        
     def setup(self, stage: Optional[str] = None):
         """Initialize the dataset based on the stage option ('fit', 'test' or 'attack'):
         - if stage is 'fit', set up the training and validation dataset;
@@ -548,13 +549,14 @@ class BrainTumorMRIDataModule(LightningDataModule):
         num_workers: int = DEFAULT_NUM_WORKERS,
         batch_sampler: Sampler = None,
         tune_on_val: bool = False,
+        seed: int = None,
     ):
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.num_workers = num_workers
         self.num_classes = 4
         self.multi_class = False
-
+        
         self.batch_sampler = batch_sampler
         self.tune_on_val = tune_on_val
 
@@ -564,15 +566,15 @@ class BrainTumorMRIDataModule(LightningDataModule):
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
         ]
         print(self._train_transforms)
 
-        self._test_transforms = [
+        self._test_transforms =[
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
         ]
         print(self._test_transforms)
 

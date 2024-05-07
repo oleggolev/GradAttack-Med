@@ -210,13 +210,14 @@ class ResNet(nn.Module):
         if lout > 4:
             out = F.avg_pool2d(out, 4)
             out = out.view(out.size(0), -1)
+            print(out)
             out = self.linear(out)
             breakpoint()
         return out
 
 
 def ResNet18(num_classes=10):
-    return ResNet(PreActBlock, [2, 2, 2, 2], num_classes=num_classes)
+    return torchvision.models.resnet18(num_classes=num_classes)
 
 
 def ResNet18_basic(num_classes=10):
@@ -228,7 +229,7 @@ def ResNet34(num_classes=10):
 
 
 def ResNet50(num_classes=10):
-    return ResNet(Bottleneck, [3, 4, 6, 3], num_classes=num_classes)
+    return torchvision.models.resnet50(num_classes=num_classes)
 
 
 def ResNet101(num_classes=10):

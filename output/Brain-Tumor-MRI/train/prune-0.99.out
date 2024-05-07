@@ -1,0 +1,11 @@
+/scratch/network/ogolev/GradAttack-Med/data/brain-tumor-MRI
+[RandomResizedCrop(size=(224, 224), scale=(0.08, 1.0), ratio=(0.75, 1.3333), interpolation=bilinear), RandomHorizontalFlip(p=0.5), ToTensor(), Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])]
+[Resize(size=256, interpolation=bilinear), CenterCrop(size=(224, 224)), ToTensor(), Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])]
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+Applied defenses:
+	Defense name: GradPruneDefense	Parameters: p: 0.99	
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+srun: Job step aborted: Waiting up to 47 seconds for job step to finish.
+slurmstepd: error: *** JOB 56200807 ON della-l04g10 CANCELLED AT 2024-05-06T16:18:35 ***
+slurmstepd: error: *** STEP 56200807.0 ON della-l04g10 CANCELLED AT 2024-05-06T16:18:35 ***

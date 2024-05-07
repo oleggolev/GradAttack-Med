@@ -18,4 +18,4 @@ module load anaconda3/2022.10
 source /scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/activate
 
 # Defend with Gradient Pruning
-srun python3 examples/train_brain_tumor_mri.py --scheduler ReduceLROnPlateau --n_epoch 50 --tune_on_val 0.02 --lr 0.05 --lr_factor 0.5 --logname Brain-Tumor-MRI/GradPrune-$1 --defense_gradprune --p $1
+srun python3 /scratch/network/ogolev/GradAttack-Med/examples/train_brain_tumor_mri.py --scheduler ReduceLROnPlateau --n_epoch 50 --tune_on_val 0.02 --lr 0.05 --lr_factor 0.5 --logname Brain-Tumor-MRI/GradPrune-$1 --defense_gradprune --p $1
