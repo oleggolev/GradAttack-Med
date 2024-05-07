@@ -18,4 +18,4 @@ module load anaconda3/2022.10
 source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
 
 # Defend with InstaHide
-srun python3 /scratch/gpfs/adityam/GradAttack-Med/examples/train_brain_tumor_mri.py --scheduler StepLR --n_epoch 200 --tune_on_val 0.02 --lr_step 50 --lr 0.05 --lr_factor 0.1 --logname Brain-Tumor-MRI/InstaHide-$1 --defense_instahide --k $1 --c_1 0 --c_2 0.65 --patience 50
+srun python3 /scratch/gpfs/adityam/GradAttack-Med/examples/train_brain_tumor_mri.py --scheduler StepLR --n_epoch 20 --tune_on_val 0.02 --lr_step 50 --lr 0.01 --lr_factor 0.1 --logname Brain-Tumor-MRI/InstaHide-$1 --defense_instahide --k $1 --c_1 0 --c_2 0.65 --patience 50
