@@ -18,4 +18,4 @@ module load anaconda3/2022.10
 source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
 
 # Defend with Gradient Pruning
-srun python3 examples/attack_brain_tumor_mri.py --batch_size $2 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_gradprune --p $1
+srun python3 /scratch/gpfs/adityam/GradAttack-Med/examples/attack_brain_tumor_mri.py --batch_size $2 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_gradprune --p $1

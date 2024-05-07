@@ -18,4 +18,4 @@ module load anaconda3/2022.10
 source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
 
 # Attack the InstaHide model.
-srun python3 examples/attack_brain_tumor_mri.py --batch_size $2 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_instahide --k $1 --c_1 0 --c_2 0.65
+srun python3 /scratch/gpfs/adityam/GradAttack-Med/examples/attack_brain_tumor_mri.py --batch_size $2 --BN_exact --tv 0.1 --bn_reg 0.005 --defense_instahide --k $1 --c_1 0 --c_2 0.65

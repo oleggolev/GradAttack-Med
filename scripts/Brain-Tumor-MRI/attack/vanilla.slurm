@@ -18,4 +18,4 @@ module load anaconda3/2022.10
 source /scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/activate
 
 # No defenses: strong attacker (the attacker knows the BatchNorm statistics and private labels)
-srun python3 examples/attack_brain_tumor_mri.py --batch_size $1 --BN_exact --tv 0.1 --bn_reg 0.005
+srun python3 /scratch/gpfs/adityam/GradAttack-Med/examples/attack_brain_tumor_mri.py --batch_size $1 --BN_exact --tv 0.1 --bn_reg 0.005
