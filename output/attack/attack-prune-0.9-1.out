@@ -1,3 +1,3 @@
-/scratch/gpfs/adityam/GradAttack-Med/grad-attack-env/bin/python3: can't open file '/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/examples/attack_cifar10_gradinversion.py': [Errno 2] No such file or directory
+/scratch/network/ogolev/GradAttack-Med/grad-attack-env/bin/python3: can't open file '/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/examples/attack_cifar10_gradinversion.py': [Errno 2] No such file or directory
 srun: error: della-l03g10: task 0: Exited with exit code 2
 srun: Terminating StepId=56200759.0

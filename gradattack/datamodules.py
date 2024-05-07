@@ -13,7 +13,7 @@ from torch.utils.data.sampler import Sampler
 from torchvision.datasets.cifar import CIFAR10
 from torchvision.datasets import MNIST
 
-DEFAULT_DATA_DIR = "/scratch/gpfs/adityam/GradAttack-Med/data"
+DEFAULT_DATA_DIR = "/scratch/network/ogolev/GradAttack-Med/data"
 DEFAULT_NUM_WORKERS = 48
 
 TRANSFORM_IMAGENET = [

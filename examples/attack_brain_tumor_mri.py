@@ -64,7 +64,7 @@ def setup_attack():
         
     if args.defense_gradprune:
         if args.defense_instahide:
-            dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/InstaHide+GradPrune-{args.p}-{args.klam}/SGD/StepLR/version_3/checkpoints/"
+            dir = f"/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/InstaHide+GradPrune-{args.p}-{args.klam}/SGD/StepLR/version_3/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -74,7 +74,7 @@ def setup_attack():
                                             ckpt=ckpt_file_abs_path,
                                             **hparams).to(DEVICE)
         elif args.defense_mixup:
-            dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/MixUp+GradPrune-{args.p}-{args.klam}/SGD/ReduceLROnPlateau/version_4/checkpoints/"
+            dir = f"/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/MixUp+GradPrune-{args.p}-{args.klam}/SGD/ReduceLROnPlateau/version_4/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -84,7 +84,7 @@ def setup_attack():
                                             ckpt=ckpt_file_abs_path,
                                             **hparams).to(DEVICE)
         else:
-            dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/GradPrune-{args.p}/SGD/ReduceLROnPlateau/version_4/checkpoints/"
+            dir = f"/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/GradPrune-{args.p}/SGD/ReduceLROnPlateau/version_4/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -95,7 +95,7 @@ def setup_attack():
                                             **hparams).to(DEVICE)
             
     elif args.defense_instahide:
-        dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/InstaHide-{args.klam}/SGD/StepLR/version_1/checkpoints/"
+        dir = f"/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/InstaHide-{args.klam}/SGD/StepLR/version_1/checkpoints/"
         ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
         ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
@@ -105,7 +105,7 @@ def setup_attack():
                                         ckpt=ckpt_file_abs_path,
                                         **hparams).to(DEVICE)
     elif args.defense_mixup:
-        dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/MixUp-{args.klam}/SGD/ReduceLROnPlateau/version_1/checkpoints/"
+        dir = f"/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/MixUp-{args.klam}/SGD/ReduceLROnPlateau/version_1/checkpoints/"
         ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
         ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
@@ -120,7 +120,7 @@ def setup_attack():
             datamodule.num_classes,
             training_loss_metric=loss,
             pretrained=False,
-            ckpt="/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/Vanilla/SGD/ReduceLROnPlateau/version_13/checkpoints/epoch=43-step=967.ckpt",
+            ckpt="/scratch/network/ogolev/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/Vanilla/SGD/ReduceLROnPlateau/version_13/checkpoints/epoch=43-step=967.ckpt",
             **hparams).to(DEVICE)
 
     logger = TensorBoardLogger("tb_logs", name=f"{args.logname}")
