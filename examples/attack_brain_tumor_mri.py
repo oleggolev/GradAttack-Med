@@ -6,19 +6,19 @@ from pytorch_lightning.loggers.tensorboard import TensorBoardLogger
 from torch.nn.modules.loss import CrossEntropyLoss
 
 from gradattack.attacks.gradientinversion import GradientReconstructor
-from gradattack.datamodules import CIFAR10DataModule
+from gradattack.datamodules import BrainTumorMRIDataModule
 from gradattack.defenses.defense_utils import DefensePack
 from gradattack.models import create_lightning_module
 from gradattack.trainingpipeline import TrainingPipeline
 from gradattack.utils import (cross_entropy_for_onehot, parse_args,
                               patch_image, save_fig)
 
-cifar10_mean = torch.tensor(
-    [0.4914672374725342, 0.4822617471218109, 0.4467701315879822])
-cifar10_std = torch.tensor(
-    [0.24703224003314972, 0.24348513782024384, 0.26158785820007324])
-dm = cifar10_mean[:, None, None]
-ds = cifar10_std[:, None, None]
+mri_mean = torch.tensor(
+    (0.485, 0.456, 0.406))
+mri_std = torch.tensor(
+    (0.229, 0.224, 0.225))
+dm = mri_mean[:, None, None]
+ds = mri_std[:, None, None]
 
 
 def setup_attack():
@@ -46,7 +46,7 @@ def setup_attack():
         BN_str = 'BN_exact'
         attack_hparams['attacker_eval_mode'] = False
 
-    datamodule = CIFAR10DataModule(batch_size=args.batch_size,
+    datamodule = BrainTumorMRIDataModule(batch_size=args.batch_size,
                                    augment={
                                        "hflip": False,
                                        "color_jitter": None,
@@ -64,7 +64,7 @@ def setup_attack():
         
     if args.defense_gradprune:
         if args.defense_instahide:
-            dir = f"/scratch/gpfs/adityam/GradAttack-Med/tb_logs/CIFAR10/InstaHide+GradPrune-{args.p}-{args.klam}/SGD/StepLR/version_0/checkpoints/"
+            dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/InstaHide+GradPrune-{args.p}-{args.klam}/SGD/StepLR/version_3/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -74,7 +74,7 @@ def setup_attack():
                                             ckpt=ckpt_file_abs_path,
                                             **hparams).to(DEVICE)
         elif args.defense_mixup:
-            dir = f"/scratch/gpfs/adityam/GradAttack-Med/tb_logs/CIFAR10/MixUp+GradPrune-{args.p}-{args.klam}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+            dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/MixUp+GradPrune-{args.p}-{args.klam}/SGD/ReduceLROnPlateau/version_4/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -84,7 +84,7 @@ def setup_attack():
                                             ckpt=ckpt_file_abs_path,
                                             **hparams).to(DEVICE)
         else:
-            dir = f"/scratch/gpfs/adityam/GradAttack-Med/tb_logs/CIFAR10/GradPrune-{args.p}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+            dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/GradPrune-{args.p}/SGD/ReduceLROnPlateau/version_4/checkpoints/"
             ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
             ckpt_file_abs_path = dir + ckpt_file
             model = create_lightning_module("ResNet18",
@@ -95,7 +95,7 @@ def setup_attack():
                                             **hparams).to(DEVICE)
             
     elif args.defense_instahide:
-        dir = f"/scratch/gpfs/adityam/GradAttack-Med/tb_logs/CIFAR10/InstaHide-{args.klam}/SGD/StepLR/version_0/checkpoints/"
+        dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/InstaHide-{args.klam}/SGD/StepLR/version_1/checkpoints/"
         ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
         ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
@@ -105,7 +105,7 @@ def setup_attack():
                                         ckpt=ckpt_file_abs_path,
                                         **hparams).to(DEVICE)
     elif args.defense_mixup:
-        dir = f"/scratch/gpfs/adityam/GradAttack-Med/tb_logs/CIFAR10/MixUp-{args.klam}/SGD/ReduceLROnPlateau/version_0/checkpoints/"
+        dir = f"/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/MixUp-{args.klam}/SGD/ReduceLROnPlateau/version_1/checkpoints/"
         ckpt_file = [file for file in os.listdir(dir) if os.path.isfile(os.path.join(dir, file))][0]
         ckpt_file_abs_path = dir + ckpt_file
         model = create_lightning_module("ResNet18",
@@ -120,7 +120,7 @@ def setup_attack():
             datamodule.num_classes,
             training_loss_metric=loss,
             pretrained=False,
-            ckpt="/scratch/gpfs/adityam/GradAttack-Med/tb_logs/CIFAR10/Vanilla/SGD/ReduceLROnPlateau/version_12/checkpoints/epoch=38-step=14936.ckpt",
+            ckpt="/scratch/gpfs/adityam/GradAttack-Med/scripts/Brain-Tumor-MRI/tb_logs/Brain-Tumor-MRI/Vanilla/SGD/ReduceLROnPlateau/version_13/checkpoints/epoch=43-step=967.ckpt",
             **hparams).to(DEVICE)
 
     logger = TensorBoardLogger("tb_logs", name=f"{args.logname}")
@@ -137,7 +137,7 @@ def setup_attack():
 
     defense_pack.apply_defense(pipeline)
 
-    ROOT_DIR = f"{args.results_dir}/CIFAR10-{args.batch_size}-{str(defense_pack)}/tv={attack_hparams['total_variation']}{BN_str}-bn={attack_hparams['bn_reg']}-dataseed={seed}/Epoch_{EPOCH}"
+    ROOT_DIR = f"{args.results_dir}/Brain-Tumor-MRI-{args.batch_size}-{str(defense_pack)}"
     try:
         os.makedirs(ROOT_DIR, exist_ok=True)
     except FileExistsError:
