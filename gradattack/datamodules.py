@@ -549,6 +549,7 @@ class BrainTumorMRIDataModule(LightningDataModule):
         num_workers: int = DEFAULT_NUM_WORKERS,
         batch_sampler: Sampler = None,
         tune_on_val: bool = False,
+        seed: int = None,
     ):
         self.data_dir = data_dir
         self.batch_size = batch_size
