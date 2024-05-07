@@ -229,7 +229,7 @@ def ResNet34(num_classes=10):
 
 
 def ResNet50(num_classes=10):
-    return ResNet(Bottleneck, [3, 4, 6, 3], num_classes=num_classes)
+    return torchvision.models.resnet50(num_classes=num_classes)
 
 
 def ResNet101(num_classes=10):
